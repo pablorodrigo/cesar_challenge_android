@@ -1,4 +1,8 @@
 <resources>
+    <!--App configs-->
     <string name="app_name">SearchOnList</string>
+    <!--MainActivity.kt-->
     <string name="ic_search">Search…</string>
+    <!-- Adapter Products -->
+    <string name="tv_product_name">Product Name</string>
 </resources>
