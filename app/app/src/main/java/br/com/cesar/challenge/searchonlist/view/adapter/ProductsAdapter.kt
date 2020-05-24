@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.cesar.challenge.searchonlist.R
 import br.com.cesar.challenge.searchonlist.model.entity.Product
+import br.com.cesar.challenge.searchonlist.utils.PartialPermutation
+import br.com.cesar.challenge.searchonlist.utils.Typos
 import kotlinx.android.synthetic.main.adapter_products.view.*
 import java.util.*
 
@@ -45,6 +47,7 @@ class ProductsAdapter(private val context: Context, private val listOfProducts: 
      * filter list of products
      */
     fun filter(text: String) {
+
         when {
             text.isEmpty() -> {
 
@@ -56,8 +59,10 @@ class ProductsAdapter(private val context: Context, private val listOfProducts: 
                 val listFiltered = ArrayList<Product>()
 
                 for (product in listOfProducts) {
-                    if (product.title.toLowerCase(Locale.getDefault())
-                            .contains(text.toLowerCase(Locale.getDefault()))
+                    if (validateWord(
+                            product.title.toLowerCase(Locale.getDefault()),
+                            text.toLowerCase(Locale.getDefault())
+                        )
                     ) {
 
                         listFiltered.add(product)
@@ -69,6 +74,26 @@ class ProductsAdapter(private val context: Context, private val listOfProducts: 
             }
         }
         notifyDataSetChanged()
+    }
+
+
+    private fun validateWord(query: String, wordCheck: String): Boolean {
+
+        val sequenceWord = query.toLowerCase(Locale.getDefault())
+        val word = wordCheck.toLowerCase(Locale.getDefault())
+
+        if (sequenceWord == word || sequenceWord.contains(word)) return true
+
+        var count = 0
+        if (PartialPermutation.checkIfIs(sequenceWord, word)) {
+            count++
+        }
+        if (Typos.checkIfIsTypos(sequenceWord, word)) {
+            count++
+        }
+
+        return count == 1
+
     }
 
 
